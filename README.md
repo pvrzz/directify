@@ -65,21 +65,21 @@ manage collections, all from one desktop app. The actual beatmap search and down
 
 ## Project layout
 
-This is a pnpm monorepo:
+This repo is a pnpm monorepo holding the app itself and the libraries it depends on. The landing
+page at [directify.pvrz.lol](https://directify.pvrz.lol) is closed-source and lives in a separate,
+private repo; it isn't part of this codebase.
 
 | Path | What it is |
 | --- | --- |
-| `apps/desktop` | The actual product: an Electron + React app. Beatmap source adapters live in `apps/desktop/src/main/sources` (a generic `MirrorSource` class works against any catboy.best-compatible API); `apps/desktop/src/main/source-registry.ts` handles the fallback chain and per-source rate limiting. |
-| `apps/web` | The landing page (Next.js) at [directify.pvrz.lol](https://directify.pvrz.lol): hero, feature overview, and a download link to this repo's Releases. It doesn't do any beatmap searching itself. |
-| `packages/shared` | Types shared across apps, plus the `collection.db` binary reader/writer. |
-| `packages/ui` | The shared design system (theme tokens, `Button`, `Card`, `Icon`, `DualRangeSlider`, and more) used by both the desktop renderer and the website. |
+| `apps/desktop` | The app: an Electron + React client. Beatmap source adapters live in `apps/desktop/src/main/sources` (a generic `MirrorSource` class works against any catboy.best-compatible API); `apps/desktop/src/main/source-registry.ts` handles the fallback chain and per-source rate limiting. |
+| `packages/shared` | Types shared across the app, plus the `collection.db` binary reader/writer. |
+| `packages/ui` | The app's design system: theme tokens, `Button`, `Card`, `Icon`, `DualRangeSlider`, and more. |
 
 ## Development
 
 ```bash
 pnpm install
 pnpm dev:desktop   # Electron app
-pnpm dev:web       # Landing page at http://localhost:3000
 ```
 
 Build a real portable `.exe`, the same thing the Releases page ships:

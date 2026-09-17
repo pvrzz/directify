@@ -1,0 +1,155 @@
+/*
+ * Design tokens for both apps. Dark palette grounded in osu.ppy.sh's own
+ * rendered styles (getComputedStyle, 2026-09-17); light palette is a
+ * from-scratch WCAG-checked counterpart (osu! itself has no light mode to
+ * ground against). Font is Roboto — "Google Sans" (used on the logo) is
+ * Google-internal and not redistributable, Roboto is the real open-source
+ * font it derives its character from. Full extraction, contrast matrix, and
+ * rationale in /.tastemaker/style-lock.md.
+ */
+:root,
+:root[data-theme="dark"] {
+  --df-bg: #171a1c;
+  --df-surface-1: #22282a;
+  --df-surface-2: #2e3538;
+  --df-surface-3: #394246;
+  --df-surface-4: #454f54;
+  --df-border: #394246;
+
+  --df-bg-elevated: var(--df-surface-1);
+  --df-bg-elevated-2: var(--df-surface-2);
+
+  --df-text: #f4f2f7;
+  --df-text-muted: #9ca3a8;
+
+  --df-pink: #ff66ab;
+  --df-blue: #66ccff;
+  --df-lime: #b3ff66;
+  --df-on-fill: #171a1c;
+
+  --df-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
+  --df-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --df-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.35);
+  --df-glow-pink: 0 0 0 1px rgba(255, 102, 171, 0.3), 0 8px 24px rgba(255, 102, 171, 0.18);
+  --df-glow-blue: 0 0 0 1px rgba(102, 204, 255, 0.3), 0 8px 24px rgba(102, 204, 255, 0.18);
+
+  --df-glass-bg: rgba(34, 40, 42, 0.72);
+  --df-glass-blur: blur(14px) saturate(140%);
+}
+
+:root[data-theme="light"] {
+  --df-bg: #f4f5f6;
+  --df-surface-1: #ffffff;
+  --df-surface-2: #eceeef;
+  --df-surface-3: #dde0e2;
+  --df-surface-4: #c7cbce;
+  --df-border: #dde0e2;
+
+  --df-bg-elevated: var(--df-surface-1);
+  --df-bg-elevated-2: var(--df-surface-2);
+
+  --df-text: #171a1c;
+  --df-text-muted: #5b6367;
+
+  --df-pink: #c41f6b;
+  --df-blue: #0972a8;
+  --df-lime: #4f7a1a;
+  --df-on-fill: #ffffff;
+
+  --df-shadow-sm: 0 1px 2px rgba(23, 26, 28, 0.08), 0 1px 1px rgba(23, 26, 28, 0.06);
+  --df-shadow-md: 0 4px 12px rgba(23, 26, 28, 0.1), 0 2px 4px rgba(23, 26, 28, 0.06);
+  --df-shadow-lg: 0 16px 40px rgba(23, 26, 28, 0.14), 0 4px 10px rgba(23, 26, 28, 0.08);
+  --df-glow-pink: 0 0 0 1px rgba(196, 31, 107, 0.25), 0 8px 24px rgba(196, 31, 107, 0.12);
+  --df-glow-blue: 0 0 0 1px rgba(9, 114, 168, 0.25), 0 8px 24px rgba(9, 114, 168, 0.12);
+
+  --df-glass-bg: rgba(255, 255, 255, 0.72);
+  --df-glass-blur: blur(14px) saturate(140%);
+}
+
+:root {
+  --df-radius-sm: 8px;
+  --df-radius-md: 10px;
+  --df-radius-lg: 16px;
+  --df-font: "Roboto", "Segoe UI", system-ui, sans-serif;
+}
+
+:root[data-reduce-motion="true"] *,
+:root[data-reduce-motion="true"] *::before,
+:root[data-reduce-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 20% -10%, color-mix(in srgb, var(--df-pink) 8%, transparent), transparent 45%),
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--df-blue) 8%, transparent), transparent 40%),
+    var(--df-bg);
+  color: var(--df-text);
+  font-family: var(--df-font);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--df-blue);
+  outline-offset: 2px;
+  border-radius: var(--df-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.df-range-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.df-range-thumb::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--df-pink);
+  border: 2px solid var(--df-on-fill);
+  box-shadow: var(--df-shadow-sm);
+  cursor: pointer;
+}
+
+.df-range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--df-pink);
+  border: 2px solid var(--df-on-fill);
+  box-shadow: var(--df-shadow-sm);
+  cursor: pointer;
+}
+
+.df-range-thumb::-webkit-slider-runnable-track,
+.df-range-thumb::-moz-range-track {
+  background: transparent;
+}

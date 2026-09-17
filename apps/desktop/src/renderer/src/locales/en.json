@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "library": "Library",
+    "findMaps": "Find maps",
+    "collections": "Collections",
+    "backup": "Backup",
+    "settings": "Settings"
+  },
+  "common": {
+    "search": "Search",
+    "install": "Install",
+    "installing": "Installing...",
+    "rescan": "Rescan",
+    "add": "Add",
+    "remove": "Remove",
+    "delete": "Delete",
+    "loading": "Loading..."
+  },
+  "library": {
+    "title": "Library",
+    "filterPlaceholder": "Filter your library...",
+    "scanning": "Scanning your Songs folder...",
+    "foundCount": "{{count}} beatmapsets found.",
+    "emptyNoMaps": "No beatmaps found in your Songs folder yet — install some from Find maps.",
+    "emptyNoMatch": "No maps match that filter.",
+    "selectedCount": "{{count}} selected",
+    "collectionNamePlaceholder": "Collection name...",
+    "addToCollection": "Add to collection",
+    "difficulty_one": "{{count}} difficulty",
+    "difficulty_other": "{{count}} difficulties"
+  },
+  "search": {
+    "placeholder": "Search beatmaps...",
+    "emptyPrompt": "Search for a title, artist, or mapper to get started.",
+    "resultCount": "{{count}} results",
+    "genre": "Genre",
+    "language": "Language",
+    "any": "Any",
+    "starRating": "Star rating"
+  },
+  "collections": {
+    "title": "Collections",
+    "description": "Reads and writes your osu!stable collection.db directly — changes here show up in-game the next time you restart osu!.",
+    "newNamePlaceholder": "New collection name",
+    "emptyState": "No collections yet — add one above, or select maps in your Library and add them there.",
+    "maps_one": "{{count}} map",
+    "maps_other": "{{count}} maps"
+  },
+  "backup": {
+    "title": "Backup & Restore",
+    "restoreFromZip": "Restore from zip...",
+    "backupEverything": "Backup everything",
+    "backupSelected": "Backup {{count}} selected",
+    "description": "{{count}} beatmapsets found. Click cards to select a subset, or leave nothing selected to back up everything."
+  },
+  "settings": {
+    "title": "Settings",
+    "osuFolder": "osu!stable install folder",
+    "notConfigured": "Not configured",
+    "autoDetect": "Auto-detect",
+    "chooseFolder": "Choose folder...",
+    "appearance": "Appearance",
+    "appearanceDesc": "Theme, motion, and language for the whole app.",
+    "networkDesc": "Route directify's traffic through a proxy if you need one.",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "themeSystem": "System",
+    "reduceMotion": "Reduce motion",
+    "reduceMotionHint": "Turns off hover lifts, tab-switch fades, and other animation.",
+    "language": "Language",
+    "network": "Network",
+    "proxy": "Proxy",
+    "proxyType": "Proxy type",
+    "proxyTypeNone": "None",
+    "proxyHost": "Host",
+    "proxyPort": "Port",
+    "sources": "Beatmap search sources",
+    "sourcesHint": "Tried top to bottom — if one fails, the next enabled source is used automatically. Drag the order to your preference, or disable one instead of removing it.",
+    "sourceFormatHint": "A source must be a catboy.best-compatible mirror exposing: GET {{baseUrl}}/api/search, GET {{baseUrl}}/api/v2/s/:id, and GET {{baseUrl}}/d/:id",
+    "addSource": "Add source",
+    "sourceNamePlaceholder": "Name",
+    "sourceUrlPlaceholder": "https://your-mirror.example",
+    "builtIn": "Built-in",
+    "enabled": "Enabled",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
+  },
+  "update": {
+    "available": "directify {{version}} is available.",
+    "download": "Download",
+    "dismiss": "Dismiss"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "jumpToTab": "Jump to a tab",
+    "focusSearch": "Focus search / filter",
+    "activateSelection": "Activate the focused item",
+    "closeOrDeselect": "Close dialog / clear selection",
+    "toggleHelp": "Toggle this help"
+  }
+}

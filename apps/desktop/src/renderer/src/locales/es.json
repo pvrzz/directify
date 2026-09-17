@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "library": "Biblioteca",
+    "findMaps": "Buscar mapas",
+    "collections": "Colecciones",
+    "backup": "Copia de seguridad",
+    "settings": "Configuración"
+  },
+  "common": {
+    "search": "Buscar",
+    "install": "Instalar",
+    "installing": "Instalando...",
+    "rescan": "Volver a escanear",
+    "add": "Añadir",
+    "remove": "Quitar",
+    "delete": "Eliminar",
+    "loading": "Cargando..."
+  },
+  "library": {
+    "title": "Biblioteca",
+    "filterPlaceholder": "Filtrar tu biblioteca...",
+    "scanning": "Escaneando tu carpeta Songs...",
+    "foundCount": "{{count}} beatmapsets encontrados.",
+    "emptyNoMaps": "Aún no hay mapas en tu carpeta Songs — instala algunos desde Buscar mapas.",
+    "emptyNoMatch": "Ningún mapa coincide con ese filtro.",
+    "selectedCount": "{{count}} seleccionados",
+    "collectionNamePlaceholder": "Nombre de la colección...",
+    "addToCollection": "Añadir a colección",
+    "difficulty_one": "{{count}} dificultad",
+    "difficulty_other": "{{count}} dificultades"
+  },
+  "search": {
+    "placeholder": "Buscar beatmaps...",
+    "emptyPrompt": "Busca un título, artista o mapper para empezar.",
+    "resultCount": "{{count}} resultados",
+    "genre": "Género",
+    "language": "Idioma",
+    "any": "Cualquiera",
+    "starRating": "Dificultad (estrellas)"
+  },
+  "collections": {
+    "title": "Colecciones",
+    "description": "Lee y escribe directamente tu collection.db de osu!stable — los cambios aquí aparecen en el juego la próxima vez que reinicies osu!.",
+    "newNamePlaceholder": "Nombre de nueva colección",
+    "emptyState": "Todavía no hay colecciones — añade una arriba, o selecciona mapas en tu Biblioteca y añádelos ahí.",
+    "maps_one": "{{count}} mapa",
+    "maps_other": "{{count}} mapas"
+  },
+  "backup": {
+    "title": "Copia de seguridad y restauración",
+    "restoreFromZip": "Restaurar desde zip...",
+    "backupEverything": "Respaldar todo",
+    "backupSelected": "Respaldar {{count}} seleccionados",
+    "description": "{{count}} beatmapsets encontrados. Haz clic en las tarjetas para elegir un subconjunto, o no selecciones nada para respaldarlo todo."
+  },
+  "settings": {
+    "title": "Configuración",
+    "osuFolder": "Carpeta de instalación de osu!stable",
+    "notConfigured": "Sin configurar",
+    "autoDetect": "Detectar automáticamente",
+    "chooseFolder": "Elegir carpeta...",
+    "appearance": "Apariencia",
+    "appearanceDesc": "Tema, movimiento e idioma para toda la aplicación.",
+    "networkDesc": "Enruta el tráfico de directify a través de un proxy si lo necesitas.",
+    "theme": "Tema",
+    "themeDark": "Oscuro",
+    "themeLight": "Claro",
+    "themeSystem": "Sistema",
+    "reduceMotion": "Reducir movimiento",
+    "reduceMotionHint": "Desactiva los efectos de hover, transiciones de pestañas y otras animaciones.",
+    "language": "Idioma",
+    "network": "Red",
+    "proxy": "Proxy",
+    "proxyType": "Tipo de proxy",
+    "proxyTypeNone": "Ninguno",
+    "proxyHost": "Host",
+    "proxyPort": "Puerto",
+    "sources": "Fuentes de búsqueda de beatmaps",
+    "sourcesHint": "Se prueban de arriba a abajo — si una falla, se usa automáticamente la siguiente habilitada. Ordénalas a tu gusto, o desactiva una en vez de eliminarla.",
+    "sourceFormatHint": "Debe ser un mirror compatible con catboy.best que exponga: GET {{baseUrl}}/api/search, GET {{baseUrl}}/api/v2/s/:id y GET {{baseUrl}}/d/:id",
+    "addSource": "Añadir fuente",
+    "sourceNamePlaceholder": "Nombre",
+    "sourceUrlPlaceholder": "https://tu-mirror.example",
+    "builtIn": "Integrado",
+    "enabled": "Habilitado",
+    "moveUp": "Subir",
+    "moveDown": "Bajar"
+  },
+  "update": {
+    "available": "directify {{version}} está disponible.",
+    "download": "Descargar",
+    "dismiss": "Descartar"
+  },
+  "shortcuts": {
+    "title": "Atajos de teclado",
+    "jumpToTab": "Saltar a una pestaña",
+    "focusSearch": "Enfocar búsqueda / filtro",
+    "activateSelection": "Activar el elemento enfocado",
+    "closeOrDeselect": "Cerrar diálogo / deseleccionar",
+    "toggleHelp": "Mostrar/ocultar esta ayuda"
+  }
+}

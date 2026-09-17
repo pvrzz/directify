@@ -1,0 +1,16 @@
+appId: com.directify.app
+productName: directify
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**/*
+  - package.json
+extraResources:
+  - from: resources
+    to: .
+win:
+  target: portable
+  icon: build/icon.ico
+  artifactName: ${productName}-${version}-portable.${ext}
+asar: true

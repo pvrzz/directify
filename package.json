@@ -1,0 +1,16 @@
+{
+  "name": "directify",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A feature-rich, unofficial client for catboy.best.",
+  "scripts": {
+    "dev:desktop": "pnpm --filter @directify/desktop dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@12.4.2"
+}

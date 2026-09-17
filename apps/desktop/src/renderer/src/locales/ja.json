@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "library": "ライブラリ",
+    "findMaps": "譜面を探す",
+    "collections": "コレクション",
+    "backup": "バックアップ",
+    "settings": "設定"
+  },
+  "common": {
+    "search": "検索",
+    "install": "インストール",
+    "installing": "インストール中...",
+    "rescan": "再スキャン",
+    "add": "追加",
+    "remove": "削除",
+    "delete": "削除",
+    "loading": "読み込み中..."
+  },
+  "library": {
+    "title": "ライブラリ",
+    "filterPlaceholder": "ライブラリを絞り込む...",
+    "scanning": "Songsフォルダをスキャンしています...",
+    "foundCount": "{{count}} 件の譜面セットが見つかりました。",
+    "emptyNoMaps": "Songsフォルダにまだ譜面がありません — 「譜面を探す」からインストールしてください。",
+    "emptyNoMatch": "条件に一致する譜面がありません。",
+    "selectedCount": "{{count}} 件選択中",
+    "collectionNamePlaceholder": "コレクション名...",
+    "addToCollection": "コレクションに追加",
+    "difficulty_other": "難易度 {{count}} 個"
+  },
+  "search": {
+    "placeholder": "譜面を検索...",
+    "emptyPrompt": "タイトル、アーティスト、譜面制作者で検索してください。",
+    "resultCount": "{{count}} 件の結果",
+    "genre": "ジャンル",
+    "language": "言語",
+    "any": "指定なし",
+    "starRating": "スター難易度"
+  },
+  "collections": {
+    "title": "コレクション",
+    "description": "osu!stableのcollection.dbを直接読み書きします — ここでの変更はosu!を再起動すると反映されます。",
+    "newNamePlaceholder": "新しいコレクション名",
+    "emptyState": "まだコレクションがありません — 上で追加するか、ライブラリで譜面を選んで追加してください。",
+    "maps_other": "譜面 {{count}} 件"
+  },
+  "backup": {
+    "title": "バックアップと復元",
+    "restoreFromZip": "zipから復元...",
+    "backupEverything": "すべてバックアップ",
+    "backupSelected": "{{count}} 件をバックアップ",
+    "description": "{{count}} 件の譜面セットが見つかりました。カードをクリックして一部を選択するか、何も選択せずにすべてをバックアップしてください。"
+  },
+  "settings": {
+    "title": "設定",
+    "osuFolder": "osu!stable インストールフォルダ",
+    "notConfigured": "未設定",
+    "autoDetect": "自動検出",
+    "chooseFolder": "フォルダを選択...",
+    "appearance": "外観",
+    "appearanceDesc": "アプリ全体のテーマ、アニメーション、言語。",
+    "networkDesc": "必要に応じてdirectifyの通信をプロキシ経由にします。",
+    "theme": "テーマ",
+    "themeDark": "ダーク",
+    "themeLight": "ライト",
+    "themeSystem": "システム",
+    "reduceMotion": "アニメーションを減らす",
+    "reduceMotionHint": "ホバー効果やタブ切り替えのアニメーションなどをオフにします。",
+    "language": "言語",
+    "network": "ネットワーク",
+    "proxy": "プロキシ",
+    "proxyType": "プロキシの種類",
+    "proxyTypeNone": "なし",
+    "proxyHost": "ホスト",
+    "proxyPort": "ポート",
+    "sources": "譜面検索ソース",
+    "sourcesHint": "上から順に試され、失敗すると次の有効なソースが自動的に使われます。順序は好みに並べ替えられ、削除する代わりに無効化もできます。",
+    "sourceFormatHint": "catboy.best互換ミラーである必要があります: GET {{baseUrl}}/api/search, GET {{baseUrl}}/api/v2/s/:id, GET {{baseUrl}}/d/:id",
+    "addSource": "ソースを追加",
+    "sourceNamePlaceholder": "名前",
+    "sourceUrlPlaceholder": "https://your-mirror.example",
+    "builtIn": "組み込み",
+    "enabled": "有効",
+    "moveUp": "上へ",
+    "moveDown": "下へ"
+  },
+  "update": {
+    "available": "directify {{version}} が利用可能です。",
+    "download": "ダウンロード",
+    "dismiss": "閉じる"
+  },
+  "shortcuts": {
+    "title": "キーボードショートカット",
+    "jumpToTab": "タブに移動",
+    "focusSearch": "検索・フィルターにフォーカス",
+    "activateSelection": "フォーカス中の項目を実行",
+    "closeOrDeselect": "ダイアログを閉じる／選択解除",
+    "toggleHelp": "このヘルプの表示切替"
+  }
+}
