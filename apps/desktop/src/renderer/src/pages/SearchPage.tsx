@@ -8,8 +8,9 @@ import {
   type RankedStatus,
 } from "@directify/shared";
 import { Button, Card, DualRangeSlider, Icon, StatusBadge, TextInput } from "@directify/ui";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLibrary } from "../library-context";
 
 const MODES: { value: OsuMode | ""; label: string }[] = [
   { value: "", label: "All" },
@@ -89,6 +90,8 @@ function selectStyle(): React.CSSProperties {
 
 export function SearchPage() {
   const { t } = useTranslation();
+  const { installedIds, refresh: refreshLibrary } = useLibrary();
+  const [showDownloaded, setShowDownloaded] = useState(false);
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState<OsuMode | "">("");
   const [keys, setKeys] = useState<number | null>(null);
@@ -169,12 +172,18 @@ export function SearchPage() {
     try {
       await window.directify.installBeatmapSet(set);
       setStatus(`${set.artist} - ${set.title}`);
+      await refreshLibrary();
     } catch (err) {
       setStatus((err as Error).message);
     } finally {
       setInstalling(null);
     }
   }
+
+  const visibleResults = useMemo(
+    () => (showDownloaded ? results : results.filter((set) => !installedIds.has(set.id))),
+    [results, showDownloaded, installedIds]
+  );
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -321,13 +330,33 @@ export function SearchPage() {
         />
       </div>
 
-      {status && (
-        <p role="status" style={{ color: "var(--df-text-muted)", fontSize: 13 }}>
-          {status}
-        </p>
-      )}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+        {status && (
+          <p role="status" style={{ color: "var(--df-text-muted)", fontSize: 13, margin: 0 }}>
+            {status}
+          </p>
+        )}
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            fontSize: 13,
+            color: "var(--df-text-muted)",
+            marginLeft: "auto",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={showDownloaded}
+            onChange={(e) => setShowDownloaded(e.target.checked)}
+          />
+          {t("search.showDownloaded")}
+        </label>
+      </div>
 
-      {results.length === 0 ? (
+      {visibleResults.length === 0 ? (
         <div
           style={{
             padding: 40,
@@ -337,7 +366,7 @@ export function SearchPage() {
             borderRadius: "var(--df-radius-lg)",
           }}
         >
-          {t("search.emptyPrompt")}
+          {results.length > 0 ? t("search.allDownloaded") : t("search.emptyPrompt")}
         </div>
       ) : (
         <div
@@ -347,28 +376,35 @@ export function SearchPage() {
             gap: 16,
           }}
         >
-          {results.map((set) => (
-            <Card key={set.id} coverUrl={set.coverUrl} label={`${set.title} — ${set.artist}`}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{set.title}</div>
-                <StatusBadge status={set.status} />
-              </div>
-              <div style={{ fontSize: 13, color: "var(--df-text-muted)", margin: "4px 0 10px" }}>
-                {set.artist} · {set.creator}
-              </div>
-              <Button
-                variant="secondary"
-                onClick={() => install(set)}
-                disabled={installing === set.id}
-                aria-label={`${t("common.install")} ${set.title}`}
-              >
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  <Icon name="download" size={14} />
-                  {installing === set.id ? t("common.installing") : t("common.install")}
-                </span>
-              </Button>
-            </Card>
-          ))}
+          {visibleResults.map((set) => {
+            const downloaded = installedIds.has(set.id);
+            return (
+              <Card key={set.id} coverUrl={set.coverUrl} label={`${set.title} — ${set.artist}`}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                  <div style={{ fontWeight: 700, fontSize: 15 }}>{set.title}</div>
+                  <StatusBadge status={set.status} />
+                </div>
+                <div style={{ fontSize: 13, color: "var(--df-text-muted)", margin: "4px 0 10px" }}>
+                  {set.artist} · {set.creator}
+                </div>
+                <Button
+                  variant="secondary"
+                  onClick={() => install(set)}
+                  disabled={installing === set.id || downloaded}
+                  aria-label={`${t("common.install")} ${set.title}`}
+                >
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    <Icon name={downloaded ? "check" : "download"} size={14} />
+                    {downloaded
+                      ? t("search.downloaded")
+                      : installing === set.id
+                        ? t("common.installing")
+                        : t("common.install")}
+                  </span>
+                </Button>
+              </Card>
+            );
+          })}
         </div>
       )}
     </div>

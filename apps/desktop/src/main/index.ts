@@ -24,7 +24,7 @@ import { collectionDbPath, detectOsuInstallDir, isValidOsuInstallDir } from "./o
 import { loadSettings, saveSettings, type AppSettings } from "./settings.js";
 import {
   getBeatmapSetByIdWithFallback,
-  resolveDownloadUrlForResult,
+  installBeatmapSetWithFallback,
   searchWithFallback,
 } from "./source-registry.js";
 import { checkForUpdate } from "./updates.js";
@@ -89,22 +89,16 @@ function registerIpcHandlers(): void {
   ipcMain.handle("beatmaps:getById", (_e, beatmapSetId: number) =>
     getBeatmapSetByIdWithFallback(loadSettings().searchSources, beatmapSetId)
   );
-  ipcMain.handle("beatmaps:install", async (_e, set: BeatmapSet) => {
-    const downloadUrl = await resolveDownloadUrlForResult(
-      loadSettings().searchSources,
-      set.source,
-      set.id
-    );
-    if (!downloadUrl) {
-      throw new Error(`No download available for "${set.artist} - ${set.title}" yet.`);
-    }
-    await installBeatmapSet(
-      requireInstallDir(),
-      downloadUrl,
-      `${set.id} ${set.artist} - ${set.title}`,
-      set.coverUrl
-    );
-  });
+  ipcMain.handle("beatmaps:install", (_e, set: BeatmapSet) =>
+    installBeatmapSetWithFallback(loadSettings().searchSources, set.source, set.id, (downloadUrl) =>
+      installBeatmapSet(
+        requireInstallDir(),
+        downloadUrl,
+        `${set.id} ${set.artist} - ${set.title}`,
+        set.coverUrl
+      )
+    )
+  );
 
   ipcMain.handle("collections:read", async () => {
     const path = collectionDbPath(requireInstallDir());

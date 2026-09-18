@@ -51,7 +51,10 @@
     "importByLinkPlaceholder": "Paste a beatmap link or ID...",
     "importButton": "Import",
     "importNotFound": "Couldn't find a beatmapset at that link.",
-    "importInvalidLink": "That doesn't look like a beatmap link or ID."
+    "importInvalidLink": "That doesn't look like a beatmap link or ID.",
+    "showDownloaded": "Show downloaded",
+    "downloaded": "Downloaded",
+    "allDownloaded": "You already have every result here — enable \"Show downloaded\" to see them."
   },
   "collections": {
     "title": "Collections",

@@ -11,6 +11,7 @@ import { HashRouter } from "react-router-dom";
 import { App } from "./App";
 import "./i18n";
 import { resolveDesktopIcon } from "./icon-map";
+import { LibraryProvider } from "./library-context";
 import { installMockDirectifyIfNeeded } from "./mock-directify";
 import { SettingsProvider } from "./settings-context";
 
@@ -20,9 +21,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <IconProvider resolve={resolveDesktopIcon}>
       <SettingsProvider>
-        <HashRouter>
-          <App />
-        </HashRouter>
+        <LibraryProvider>
+          <HashRouter>
+            <App />
+          </HashRouter>
+        </LibraryProvider>
       </SettingsProvider>
     </IconProvider>
   </React.StrictMode>

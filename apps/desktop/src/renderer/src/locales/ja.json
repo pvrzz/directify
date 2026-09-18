@@ -50,7 +50,10 @@
     "importByLinkPlaceholder": "譜面のリンクまたはIDを貼り付け...",
     "importButton": "インポート",
     "importNotFound": "そのリンクの譜面セットが見つかりませんでした。",
-    "importInvalidLink": "有効な譜面リンクまたはIDではないようです。"
+    "importInvalidLink": "有効な譜面リンクまたはIDではないようです。",
+    "showDownloaded": "ダウンロード済みを表示",
+    "downloaded": "ダウンロード済み",
+    "allDownloaded": "ここにある結果はすべてダウンロード済みです。「ダウンロード済みを表示」を有効にすると表示されます。"
   },
   "collections": {
     "title": "コレクション",

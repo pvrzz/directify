@@ -1,12 +1,13 @@
-// Library page: shows installed beatmapsets (scanned from Songs), lets the user filter, select, add to a collection, or delete.
+// Library page: shows installed beatmapsets (auto-scanned from Songs by LibraryProvider), lets the user filter, select, add to a collection, or delete.
 import type { BeatmapSet, CollectionDatabase } from "@directify/shared";
 import { Button, Card, Icon, TextInput } from "@directify/ui";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLibrary } from "../library-context";
 
 export function LibraryPage() {
   const { t } = useTranslation();
-  const [sets, setSets] = useState<BeatmapSet[] | null>(null);
+  const { sets, refresh } = useLibrary();
   const [collections, setCollections] = useState<CollectionDatabase | null>(null);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -16,22 +17,21 @@ export function LibraryPage() {
   async function rescan() {
     setStatus(t("library.scanning"));
     try {
-      const [scanned, db] = await Promise.all([
-        window.directify.scanLibrary(),
-        window.directify.readCollections(),
-      ]);
-      setSets(scanned);
+      const [, db] = await Promise.all([refresh(), window.directify.readCollections()]);
       setCollections(db);
       setSelected(new Set());
-      setStatus(t("library.foundCount", { count: scanned.length }));
     } catch (err) {
       setStatus((err as Error).message);
     }
   }
 
   useEffect(() => {
-    rescan();
+    window.directify.readCollections().then(setCollections);
   }, []);
+
+  useEffect(() => {
+    if (sets) setStatus(t("library.foundCount", { count: sets.length }));
+  }, [sets, t]);
 
   const filtered = useMemo(() => {
     if (!sets) return [];

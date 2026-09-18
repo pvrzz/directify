@@ -1,10 +1,12 @@
 // Tries enabled beatmap sources in the user's configured order, falling
 // through to the next one on failure, and throttles per-source requests so
 // rapid filter changes (typing, dragging the star slider) can't hammer a
-// mirror faster than a search reasonably should. Install/download always
-// goes back to the specific mirror a result came from — each mirror has its
-// own independent id space, so a numeric id from one can't be assumed to
-// exist, let alone mean the same thing, on another.
+// mirror faster than a search reasonably should. Downloads prefer the
+// mirror a search result actually came from (freshest data), but fall back
+// to any other enabled mirror on failure — beatmapset ids are the same
+// across mirrors (they all index the same osu.ppy.sh catalog), so a mirror
+// having a transient outage or its own rate limit doesn't need to fail the
+// whole install.
 import type {
   BeatmapSearchQuery,
   BeatmapSearchResult,
@@ -71,14 +73,33 @@ export async function getBeatmapSetByIdWithFallback(
   return null;
 }
 
-export async function resolveDownloadUrlForResult(
+export async function installBeatmapSetWithFallback(
   sources: BeatmapSourceConfig[],
-  sourceName: string,
-  beatmapSetId: number
-): Promise<string | null> {
-  const config =
-    sources.find((s) => s.name === sourceName && s.enabled) ?? enabledInOrder(sources)[0];
-  if (!config) return null;
-  await throttle(config.id);
-  return new MirrorSource(config).resolveDownloadUrl(beatmapSetId);
+  preferredSourceName: string,
+  beatmapSetId: number,
+  install: (downloadUrl: string) => Promise<void>
+): Promise<void> {
+  const candidates = enabledInOrder(sources);
+  if (candidates.length === 0) {
+    throw new Error("No beatmap search sources are enabled.");
+  }
+
+  const ordered = [
+    ...candidates.filter((c) => c.name === preferredSourceName),
+    ...candidates.filter((c) => c.name !== preferredSourceName),
+  ];
+
+  let lastError: unknown;
+  for (const config of ordered) {
+    try {
+      await throttle(config.id);
+      const url = await new MirrorSource(config).resolveDownloadUrl(beatmapSetId);
+      if (!url) continue;
+      await install(url);
+      return;
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error("No source could download this beatmapset.");
 }
