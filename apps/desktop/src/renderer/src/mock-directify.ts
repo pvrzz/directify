@@ -196,6 +196,8 @@ export function installMockDirectifyIfNeeded(): void {
     openExternal: async (url) => {
       window.open(url, "_blank");
     },
+
+    setTitleBarOverlay: async () => {},
   };
 
   window.directify = mock;

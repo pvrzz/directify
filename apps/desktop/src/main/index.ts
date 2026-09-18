@@ -27,6 +27,8 @@ import { checkForUpdate } from "./updates.js";
 
 const ALLOWED_EXTERNAL_HOSTS = ["github.com", "www.github.com"];
 
+let mainWindow: BrowserWindow | null = null;
+
 function requireInstallDir(): string {
   const { osuInstallDir } = loadSettings();
   if (!osuInstallDir) throw new Error("osu! install directory is not configured yet.");
@@ -109,6 +111,10 @@ function registerIpcHandlers(): void {
     await writeFile(path, writeCollectionDb(db));
   });
 
+  ipcMain.handle("window:setTitleBarOverlay", (_e, colors: { color: string; symbolColor: string }) => {
+    mainWindow?.setTitleBarOverlay({ ...colors, height: 40 });
+  });
+
   ipcMain.handle("app:checkForUpdate", () => checkForUpdate(app.getVersion()));
   ipcMain.handle("app:openExternal", (_e, url: string) => {
     const host = new URL(url).hostname;
@@ -131,12 +137,26 @@ function createWindow(): void {
     height: 800,
     backgroundColor: "#171a1c",
     icon: resolveIconPath(),
+    // Hides the default titlebar/menu chrome but keeps real, natively-drawn
+    // minimize/maximize/close buttons (Windows' Window Controls Overlay) —
+    // the renderer supplies its own draggable title strip and re-colors the
+    // overlay to match the active theme via window:setTitleBarOverlay.
+    titleBarStyle: "hidden",
+    titleBarOverlay: {
+      color: "#171a1c",
+      symbolColor: "#f4f2f7",
+      height: 40,
+    },
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
     },
+  });
+  mainWindow = win;
+  win.on("closed", () => {
+    if (mainWindow === win) mainWindow = null;
   });
 
   if (process.env.ELECTRON_RENDERER_URL) {

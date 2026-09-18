@@ -46,4 +46,6 @@ export interface DirectifyIpcApi {
 
   checkForUpdate(): Promise<UpdateCheckResult>;
   openExternal(url: string): Promise<void>;
+
+  setTitleBarOverlay(colors: { color: string; symbolColor: string }): Promise<void>;
 }

@@ -26,6 +26,8 @@ const api: DirectifyIpcApi = {
 
   checkForUpdate: () => ipcRenderer.invoke("app:checkForUpdate"),
   openExternal: (url) => ipcRenderer.invoke("app:openExternal", url),
+
+  setTitleBarOverlay: (colors) => ipcRenderer.invoke("window:setTitleBarOverlay", colors),
 };
 
 contextBridge.exposeInMainWorld("directify", api);

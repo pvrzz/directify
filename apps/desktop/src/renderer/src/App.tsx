@@ -59,14 +59,23 @@ export function App() {
     if (!settings) return;
     const root = document.documentElement;
 
+    function applyTheme(resolved: "dark" | "light") {
+      root.dataset.theme = resolved;
+      window.directify.setTitleBarOverlay(
+        resolved === "dark"
+          ? { color: "#171a1c", symbolColor: "#f4f2f7" }
+          : { color: "#f4f5f6", symbolColor: "#171a1c" }
+      );
+    }
+
     if (settings.theme === "system") {
       const media = window.matchMedia("(prefers-color-scheme: dark)");
-      const apply = () => (root.dataset.theme = media.matches ? "dark" : "light");
+      const apply = () => applyTheme(media.matches ? "dark" : "light");
       apply();
       media.addEventListener("change", apply);
       return () => media.removeEventListener("change", apply);
     }
-    root.dataset.theme = settings.theme;
+    applyTheme(settings.theme);
   }, [settings?.theme]);
 
   useEffect(() => {
@@ -89,6 +98,15 @@ export function App() {
   return (
     <MotionConfig reducedMotion={settings?.reduceMotion ? "always" : "user"}>
       <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+        <div
+          style={
+            {
+              height: 40,
+              flexShrink: 0,
+              WebkitAppRegion: "drag",
+            } as React.CSSProperties
+          }
+        />
         {updateInfo?.hasUpdate && updateInfo.latestVersion && updateInfo.releaseUrl && (
           <UpdateBanner
             latestVersion={updateInfo.latestVersion}
