@@ -35,7 +35,22 @@
     "genre": "ジャンル",
     "language": "言語",
     "any": "指定なし",
-    "starRating": "スター難易度"
+    "all": "すべて",
+    "starRating": "スター難易度",
+    "status": "ステータス",
+    "sortBy": "並び替え",
+    "sortRelevance": "関連度",
+    "sortFavourites": "お気に入り数",
+    "sortPlays": "プレイ数",
+    "sortDifficultyDesc": "難易度: 高い順",
+    "sortDifficultyAsc": "難易度: 低い順",
+    "sortNewest": "新しい順",
+    "sortOldest": "古い順",
+    "importByLink": "リンクからインポート",
+    "importByLinkPlaceholder": "譜面のリンクまたはIDを貼り付け...",
+    "importButton": "インポート",
+    "importNotFound": "そのリンクの譜面セットが見つかりませんでした。",
+    "importInvalidLink": "有効な譜面リンクまたはIDではないようです。"
   },
   "collections": {
     "title": "コレクション",

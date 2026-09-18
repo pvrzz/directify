@@ -36,7 +36,22 @@
     "genre": "Genre",
     "language": "Language",
     "any": "Any",
-    "starRating": "Star rating"
+    "all": "All",
+    "starRating": "Star rating",
+    "status": "Status",
+    "sortBy": "Sort by",
+    "sortRelevance": "Relevance",
+    "sortFavourites": "Most favourited",
+    "sortPlays": "Most played",
+    "sortDifficultyDesc": "Difficulty: high to low",
+    "sortDifficultyAsc": "Difficulty: low to high",
+    "sortNewest": "Newest",
+    "sortOldest": "Oldest",
+    "importByLink": "Import by link",
+    "importByLinkPlaceholder": "Paste a beatmap link or ID...",
+    "importButton": "Import",
+    "importNotFound": "Couldn't find a beatmapset at that link.",
+    "importInvalidLink": "That doesn't look like a beatmap link or ID."
   },
   "collections": {
     "title": "Collections",

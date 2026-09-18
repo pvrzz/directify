@@ -19,6 +19,9 @@ export function UpdateBanner({
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       style={{
+        // Below the app's fixed title/window-controls strip (32px), so this
+        // banner's own buttons don't collide with it.
+        marginTop: 32,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",

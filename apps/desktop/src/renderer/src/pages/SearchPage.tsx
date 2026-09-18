@@ -1,5 +1,12 @@
-// Find-maps page: osu!lazer-style search — free text plus mode, key count, genre, language, and star-rating filters — against the active (fallback-chain) beatmap source.
-import { GENRES, LANGUAGES, type BeatmapSet, type OsuMode } from "@directify/shared";
+// Find-maps page: osu!lazer-style search — free text plus mode, key count, genre, language, status, star-rating, and sort filters — against the active (fallback-chain) beatmap source. Also supports pasting a beatmapset link/ID to fetch it directly.
+import {
+  GENRES,
+  LANGUAGES,
+  type BeatmapSet,
+  type BeatmapSortOption,
+  type OsuMode,
+  type RankedStatus,
+} from "@directify/shared";
 import { Button, Card, DualRangeSlider, Icon, StatusBadge, TextInput } from "@directify/ui";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,6 +20,47 @@ const MODES: { value: OsuMode | ""; label: string }[] = [
 ];
 
 const MANIA_KEY_COUNTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const STATUSES: RankedStatus[] = [
+  "ranked",
+  "qualified",
+  "loved",
+  "pending",
+  "wip",
+  "graveyard",
+  "approved",
+];
+
+const SORT_OPTIONS: BeatmapSortOption[] = [
+  "relevance",
+  "favourites",
+  "plays",
+  "difficulty-desc",
+  "difficulty-asc",
+  "newest",
+  "oldest",
+];
+
+const SORT_LABEL_KEY: Record<BeatmapSortOption, string> = {
+  relevance: "search.sortRelevance",
+  favourites: "search.sortFavourites",
+  plays: "search.sortPlays",
+  "difficulty-desc": "search.sortDifficultyDesc",
+  "difficulty-asc": "search.sortDifficultyAsc",
+  newest: "search.sortNewest",
+  oldest: "search.sortOldest",
+};
+
+/** Pulls a beatmapset id out of an osu!/mirror URL, or a bare numeric id typed/pasted directly. */
+function parseBeatmapSetId(input: string): number | null {
+  const trimmed = input.trim();
+  if (/^\d+$/.test(trimmed)) return Number(trimmed);
+
+  const match = trimmed.match(/beatmapsets\/(\d+)/);
+  if (match) return Number(match[1]);
+
+  return null;
+}
 
 function chipStyle(active: boolean): React.CSSProperties {
   return {
@@ -46,11 +94,15 @@ export function SearchPage() {
   const [keys, setKeys] = useState<number | null>(null);
   const [genre, setGenre] = useState<number | "">("");
   const [language, setLanguage] = useState<number | "">("");
+  const [rankedStatus, setRankedStatus] = useState<RankedStatus | "">("");
+  const [sort, setSort] = useState<BeatmapSortOption>("relevance");
   const [starRange, setStarRange] = useState<[number, number]>([0, 10]);
 
   const [results, setResults] = useState<BeatmapSet[]>([]);
   const [status, setStatus] = useState("");
   const [installing, setInstalling] = useState<number | null>(null);
+  const [importLink, setImportLink] = useState("");
+  const [importing, setImporting] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   async function search() {
@@ -62,6 +114,8 @@ export function SearchPage() {
         keys: mode === "mania" && keys ? keys : undefined,
         genre: genre === "" ? undefined : genre,
         language: language === "" ? undefined : language,
+        status: rankedStatus || undefined,
+        sort,
         minStars: starRange[0] > 0 ? starRange[0] : undefined,
         maxStars: starRange[1] < 10 ? starRange[1] : undefined,
         page: 1,
@@ -82,7 +136,32 @@ export function SearchPage() {
     debounceRef.current = setTimeout(search, 450);
     return () => clearTimeout(debounceRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, mode, keys, genre, language, starRange[0], starRange[1]]);
+  }, [query, mode, keys, genre, language, rankedStatus, sort, starRange[0], starRange[1]]);
+
+  async function importByLink() {
+    const beatmapSetId = parseBeatmapSetId(importLink);
+    if (!beatmapSetId) {
+      setStatus(t("search.importInvalidLink"));
+      return;
+    }
+
+    setImporting(true);
+    setStatus(t("common.loading"));
+    try {
+      const set = await window.directify.getBeatmapSetById(beatmapSetId);
+      if (!set) {
+        setStatus(t("search.importNotFound"));
+        return;
+      }
+      setResults([set]);
+      setStatus(t("search.resultCount", { count: 1 }));
+      setImportLink("");
+    } catch (err) {
+      setStatus((err as Error).message);
+    } finally {
+      setImporting(false);
+    }
+  }
 
   async function install(set: BeatmapSet) {
     setInstalling(set.id);
@@ -112,6 +191,23 @@ export function SearchPage() {
           aria-label={t("search.placeholder")}
           style={{ width: "100%", paddingLeft: 38 }}
         />
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <span style={{ fontSize: 12, color: "var(--df-text-muted)" }}>{t("search.importByLink")}</span>
+        <div style={{ display: "flex", gap: 8 }}>
+          <TextInput
+            value={importLink}
+            onChange={(e) => setImportLink(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && importByLink()}
+            placeholder={t("search.importByLinkPlaceholder")}
+            aria-label={t("search.importByLink")}
+            style={{ flex: 1 }}
+          />
+          <Button variant="secondary" onClick={importByLink} disabled={importing || !importLink.trim()}>
+            {t("search.importButton")}
+          </Button>
+        </div>
       </div>
 
       <div
@@ -147,7 +243,40 @@ export function SearchPage() {
           </div>
         )}
 
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          <span style={{ fontSize: 12, color: "var(--df-text-muted)" }}>{t("search.status")}</span>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button style={chipStyle(rankedStatus === "")} onClick={() => setRankedStatus("")}>
+              {t("search.all")}
+            </button>
+            {STATUSES.map((s) => (
+              <button
+                key={s}
+                style={{ ...chipStyle(rankedStatus === s), textTransform: "capitalize" }}
+                onClick={() => setRankedStatus(rankedStatus === s ? "" : s)}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span style={{ fontSize: 12, color: "var(--df-text-muted)" }}>{t("search.sortBy")}</span>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as BeatmapSortOption)}
+              style={selectStyle()}
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>
+                  {t(SORT_LABEL_KEY[opt])}
+                </option>
+              ))}
+            </select>
+          </label>
+
           <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <span style={{ fontSize: 12, color: "var(--df-text-muted)" }}>{t("search.genre")}</span>
             <select

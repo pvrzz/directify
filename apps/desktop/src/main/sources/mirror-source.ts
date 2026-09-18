@@ -11,6 +11,7 @@ import type {
   BeatmapSearchQuery,
   BeatmapSearchResult,
   BeatmapSet,
+  BeatmapSortOption,
   OsuMode,
   RankedStatus,
 } from "@directify/shared";
@@ -58,6 +59,7 @@ interface MirrorSearchBeatmap {
   OD: number;
   HP: number;
   FileMD5: string;
+  Playcount?: number;
 }
 
 interface MirrorSearchResult {
@@ -71,6 +73,7 @@ interface MirrorSearchResult {
   Genre?: { ID: number; Name: string };
   Language?: { ID: number; Name: string };
   ChildrenBeatmaps: MirrorSearchBeatmap[];
+  Favourites?: number;
 }
 
 function coverUrl(setId: number): string {
@@ -79,6 +82,35 @@ function coverUrl(setId: number): string {
 
 function previewUrl(setId: number): string {
   return `https://b.ppy.sh/preview/${setId}.mp3`;
+}
+
+function maxDifficulty(set: BeatmapSet): number {
+  return set.beatmaps.reduce((max, b) => Math.max(max, b.difficultyRating), 0);
+}
+
+// The search API returns results in the mirror's own relevance order, which
+// is left untouched unless the user explicitly asked for something else.
+function sortResults(results: BeatmapSet[], sort: BeatmapSortOption | undefined): void {
+  switch (sort) {
+    case "favourites":
+      results.sort((a, b) => (b.favouriteCount ?? 0) - (a.favouriteCount ?? 0));
+      break;
+    case "plays":
+      results.sort((a, b) => (b.playCount ?? 0) - (a.playCount ?? 0));
+      break;
+    case "difficulty-desc":
+      results.sort((a, b) => maxDifficulty(b) - maxDifficulty(a));
+      break;
+    case "difficulty-asc":
+      results.sort((a, b) => maxDifficulty(a) - maxDifficulty(b));
+      break;
+    case "newest":
+      results.sort((a, b) => Date.parse(b.submittedAt) - Date.parse(a.submittedAt));
+      break;
+    case "oldest":
+      results.sort((a, b) => Date.parse(a.submittedAt) - Date.parse(b.submittedAt));
+      break;
+  }
 }
 
 export class MirrorSource implements BeatmapSource {
@@ -123,6 +155,8 @@ export class MirrorSource implements BeatmapSource {
       updatedAt: raw.LastUpdate,
       beatmaps,
       source: this.name,
+      favouriteCount: raw.Favourites,
+      playCount: raw.ChildrenBeatmaps.reduce((sum, b) => sum + (b.Playcount ?? 0), 0),
     };
   }
 
@@ -173,6 +207,8 @@ export class MirrorSource implements BeatmapSource {
       return true;
     });
 
+    sortResults(results, query.sort);
+
     return { results, page, pageSize, total: results.length };
   }
 
@@ -210,6 +246,8 @@ export class MirrorSource implements BeatmapSource {
       updatedAt: raw.last_updated ?? "",
       beatmaps,
       source: this.name,
+      favouriteCount: raw.favourite_count,
+      playCount: raw.play_count,
     };
   }
 

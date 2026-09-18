@@ -13,6 +13,7 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { useSettings } from "./settings-context";
 import { ShortcutsHelp } from "./ShortcutsHelp";
 import { UpdateBanner } from "./UpdateBanner";
+import { WindowControls } from "./WindowControls";
 import type { UpdateCheckResult } from "../../main/updates";
 
 const SHORTCUT_ROUTES = ["/", "/search", "/collections", "/backup", "/settings"];
@@ -61,11 +62,6 @@ export function App() {
 
     function applyTheme(resolved: "dark" | "light") {
       root.dataset.theme = resolved;
-      window.directify.setTitleBarOverlay(
-        resolved === "dark"
-          ? { color: "#171a1c", symbolColor: "#f4f2f7" }
-          : { color: "#f4f5f6", symbolColor: "#171a1c" }
-      );
     }
 
     if (settings.theme === "system") {
@@ -101,12 +97,17 @@ export function App() {
         <div
           style={
             {
-              height: 40,
-              flexShrink: 0,
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 32,
+              zIndex: 90,
               WebkitAppRegion: "drag",
             } as React.CSSProperties
           }
         />
+        <WindowControls />
         {updateInfo?.hasUpdate && updateInfo.latestVersion && updateInfo.releaseUrl && (
           <UpdateBanner
             latestVersion={updateInfo.latestVersion}
@@ -119,7 +120,7 @@ export function App() {
           aria-label="Primary"
           style={{
             width: 220,
-            padding: "24px 12px",
+            padding: "36px 12px 24px",
             borderRight: "1px solid var(--df-border)",
             background: "var(--df-glass-bg)",
             backdropFilter: "var(--df-glass-blur)",

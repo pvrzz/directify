@@ -22,7 +22,11 @@ import {
 import { applyProxySettings } from "./network.js";
 import { collectionDbPath, detectOsuInstallDir, isValidOsuInstallDir } from "./osu-install.js";
 import { loadSettings, saveSettings, type AppSettings } from "./settings.js";
-import { resolveDownloadUrlForResult, searchWithFallback } from "./source-registry.js";
+import {
+  getBeatmapSetByIdWithFallback,
+  resolveDownloadUrlForResult,
+  searchWithFallback,
+} from "./source-registry.js";
 import { checkForUpdate } from "./updates.js";
 
 const ALLOWED_EXTERNAL_HOSTS = ["github.com", "www.github.com"];
@@ -82,6 +86,9 @@ function registerIpcHandlers(): void {
   ipcMain.handle("beatmaps:search", (_e, query: BeatmapSearchQuery) =>
     searchWithFallback(loadSettings().searchSources, query)
   );
+  ipcMain.handle("beatmaps:getById", (_e, beatmapSetId: number) =>
+    getBeatmapSetByIdWithFallback(loadSettings().searchSources, beatmapSetId)
+  );
   ipcMain.handle("beatmaps:install", async (_e, set: BeatmapSet) => {
     const downloadUrl = await resolveDownloadUrlForResult(
       loadSettings().searchSources,
@@ -111,9 +118,14 @@ function registerIpcHandlers(): void {
     await writeFile(path, writeCollectionDb(db));
   });
 
-  ipcMain.handle("window:setTitleBarOverlay", (_e, colors: { color: string; symbolColor: string }) => {
-    mainWindow?.setTitleBarOverlay({ ...colors, height: 40 });
+  ipcMain.handle("window:minimize", () => mainWindow?.minimize());
+  ipcMain.handle("window:toggleMaximize", () => {
+    if (!mainWindow) return;
+    if (mainWindow.isMaximized()) mainWindow.unmaximize();
+    else mainWindow.maximize();
   });
+  ipcMain.handle("window:close", () => mainWindow?.close());
+  ipcMain.handle("window:isMaximized", () => mainWindow?.isMaximized() ?? false);
 
   ipcMain.handle("app:checkForUpdate", () => checkForUpdate(app.getVersion()));
   ipcMain.handle("app:openExternal", (_e, url: string) => {
@@ -137,16 +149,11 @@ function createWindow(): void {
     height: 800,
     backgroundColor: "#171a1c",
     icon: resolveIconPath(),
-    // Hides the default titlebar/menu chrome but keeps real, natively-drawn
-    // minimize/maximize/close buttons (Windows' Window Controls Overlay) —
-    // the renderer supplies its own draggable title strip and re-colors the
-    // overlay to match the active theme via window:setTitleBarOverlay.
-    titleBarStyle: "hidden",
-    titleBarOverlay: {
-      color: "#171a1c",
-      symbolColor: "#f4f2f7",
-      height: 40,
-    },
+    // Fully custom titlebar: the native one (and Windows' Window Controls
+    // Overlay, which always paints a flat-color rect behind its buttons)
+    // can't blend into this app's gradient/glass backgrounds. The renderer
+    // draws its own drag strip and minimize/maximize/close buttons instead.
+    frame: false,
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       contextIsolation: true,
@@ -158,6 +165,8 @@ function createWindow(): void {
   win.on("closed", () => {
     if (mainWindow === win) mainWindow = null;
   });
+  win.on("maximize", () => win.webContents.send("window:maximizedChange", true));
+  win.on("unmaximize", () => win.webContents.send("window:maximizedChange", false));
 
   if (process.env.ELECTRON_RENDERER_URL) {
     win.loadURL(process.env.ELECTRON_RENDERER_URL);

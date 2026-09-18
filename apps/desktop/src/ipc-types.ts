@@ -39,6 +39,7 @@ export interface DirectifyIpcApi {
   restoreBackup(zipPath: string): Promise<void>;
 
   searchBeatmaps(query: BeatmapSearchQuery): Promise<BeatmapSearchResult>;
+  getBeatmapSetById(beatmapSetId: number): Promise<BeatmapSet | null>;
   installBeatmapSet(set: BeatmapSet): Promise<void>;
 
   readCollections(): Promise<CollectionDatabase>;
@@ -47,5 +48,9 @@ export interface DirectifyIpcApi {
   checkForUpdate(): Promise<UpdateCheckResult>;
   openExternal(url: string): Promise<void>;
 
-  setTitleBarOverlay(colors: { color: string; symbolColor: string }): Promise<void>;
+  minimizeWindow(): Promise<void>;
+  toggleMaximizeWindow(): Promise<void>;
+  closeWindow(): Promise<void>;
+  isWindowMaximized(): Promise<boolean>;
+  onWindowMaximizedChange(callback: (maximized: boolean) => void): () => void;
 }

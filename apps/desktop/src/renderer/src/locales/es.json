@@ -36,7 +36,22 @@
     "genre": "Género",
     "language": "Idioma",
     "any": "Cualquiera",
-    "starRating": "Dificultad (estrellas)"
+    "all": "Todos",
+    "starRating": "Dificultad (estrellas)",
+    "status": "Estado",
+    "sortBy": "Ordenar por",
+    "sortRelevance": "Relevancia",
+    "sortFavourites": "Más favoritos",
+    "sortPlays": "Más jugados",
+    "sortDifficultyDesc": "Dificultad: mayor a menor",
+    "sortDifficultyAsc": "Dificultad: menor a mayor",
+    "sortNewest": "Más recientes",
+    "sortOldest": "Más antiguos",
+    "importByLink": "Importar por enlace",
+    "importByLinkPlaceholder": "Pega un enlace o ID de beatmap...",
+    "importButton": "Importar",
+    "importNotFound": "No se encontró ningún beatmapset en ese enlace.",
+    "importInvalidLink": "Eso no parece un enlace o ID de beatmap válido."
   },
   "collections": {
     "title": "Colecciones",

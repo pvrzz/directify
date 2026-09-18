@@ -185,6 +185,7 @@ export function installMockDirectifyIfNeeded(): void {
       pageSize: 30,
       total: 2,
     }),
+    getBeatmapSetById: async () => null,
     installBeatmapSet: async () => {},
 
     readCollections: async () => collections,
@@ -197,7 +198,11 @@ export function installMockDirectifyIfNeeded(): void {
       window.open(url, "_blank");
     },
 
-    setTitleBarOverlay: async () => {},
+    minimizeWindow: async () => {},
+    toggleMaximizeWindow: async () => {},
+    closeWindow: async () => {},
+    isWindowMaximized: async () => false,
+    onWindowMaximizedChange: () => () => {},
   };
 
   window.directify = mock;

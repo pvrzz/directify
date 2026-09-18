@@ -48,6 +48,8 @@ export interface BeatmapSet {
   source: string;
   /** Present for beatmapsets found on disk; the Songs subfolder name, used for file operations. */
   folderName?: string;
+  favouriteCount?: number;
+  playCount?: number;
 }
 
 /** osu!'s own genre enum (matches the IDs osu!/mirrors report; "any" omitted since it means "no filter"). */
@@ -85,6 +87,15 @@ export const LANGUAGES: Record<number, string> = {
   14: "Other",
 };
 
+export type BeatmapSortOption =
+  | "relevance"
+  | "favourites"
+  | "plays"
+  | "difficulty-asc"
+  | "difficulty-desc"
+  | "newest"
+  | "oldest";
+
 export interface BeatmapSearchQuery {
   query?: string;
   mode?: OsuMode;
@@ -97,6 +108,7 @@ export interface BeatmapSearchQuery {
   language?: number;
   /** Mania key count (4, 7, ...) — matched against difficulty CS. Ignored unless mode is "mania". */
   keys?: number;
+  sort?: BeatmapSortOption;
   page?: number;
   pageSize?: number;
 }

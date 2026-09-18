@@ -5,7 +5,12 @@
 // goes back to the specific mirror a result came from — each mirror has its
 // own independent id space, so a numeric id from one can't be assumed to
 // exist, let alone mean the same thing, on another.
-import type { BeatmapSearchQuery, BeatmapSearchResult, BeatmapSourceConfig } from "@directify/shared";
+import type {
+  BeatmapSearchQuery,
+  BeatmapSearchResult,
+  BeatmapSet,
+  BeatmapSourceConfig,
+} from "@directify/shared";
 import { MirrorSource } from "./sources/mirror-source.js";
 
 const MIN_REQUEST_INTERVAL_MS = 350;
@@ -41,6 +46,29 @@ export async function searchWithFallback(
     }
   }
   throw lastError instanceof Error ? lastError : new Error("All beatmap sources failed.");
+}
+
+export async function getBeatmapSetByIdWithFallback(
+  sources: BeatmapSourceConfig[],
+  beatmapSetId: number
+): Promise<BeatmapSet | null> {
+  const candidates = enabledInOrder(sources);
+  if (candidates.length === 0) {
+    throw new Error("No beatmap search sources are enabled.");
+  }
+
+  let lastError: unknown;
+  for (const config of candidates) {
+    try {
+      await throttle(config.id);
+      const set = await new MirrorSource(config).getBeatmapSet(beatmapSetId);
+      if (set) return set;
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  if (lastError) throw lastError instanceof Error ? lastError : new Error("All beatmap sources failed.");
+  return null;
 }
 
 export async function resolveDownloadUrlForResult(

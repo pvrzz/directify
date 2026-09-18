@@ -19,6 +19,7 @@ const api: DirectifyIpcApi = {
   restoreBackup: (zipPath) => ipcRenderer.invoke("backup:restore", zipPath),
 
   searchBeatmaps: (query) => ipcRenderer.invoke("beatmaps:search", query),
+  getBeatmapSetById: (beatmapSetId) => ipcRenderer.invoke("beatmaps:getById", beatmapSetId),
   installBeatmapSet: (set) => ipcRenderer.invoke("beatmaps:install", set),
 
   readCollections: () => ipcRenderer.invoke("collections:read"),
@@ -27,7 +28,15 @@ const api: DirectifyIpcApi = {
   checkForUpdate: () => ipcRenderer.invoke("app:checkForUpdate"),
   openExternal: (url) => ipcRenderer.invoke("app:openExternal", url),
 
-  setTitleBarOverlay: (colors) => ipcRenderer.invoke("window:setTitleBarOverlay", colors),
+  minimizeWindow: () => ipcRenderer.invoke("window:minimize"),
+  toggleMaximizeWindow: () => ipcRenderer.invoke("window:toggleMaximize"),
+  closeWindow: () => ipcRenderer.invoke("window:close"),
+  isWindowMaximized: () => ipcRenderer.invoke("window:isMaximized"),
+  onWindowMaximizedChange: (callback) => {
+    const listener = (_e: unknown, maximized: boolean) => callback(maximized);
+    ipcRenderer.on("window:maximizedChange", listener);
+    return () => ipcRenderer.removeListener("window:maximizedChange", listener);
+  },
 };
 
 contextBridge.exposeInMainWorld("directify", api);
