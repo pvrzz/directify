@@ -12,5 +12,5 @@ extraResources:
 win:
   target: portable
   icon: build/icon.ico
-  artifactName: ${productName}-${version}-portable.${ext}
+  artifactName: directify_v${version}.${ext}
 asar: true

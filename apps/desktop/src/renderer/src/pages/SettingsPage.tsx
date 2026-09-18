@@ -253,7 +253,7 @@ export function SettingsPage() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
+                gap: 12,
                 padding: "10px 14px",
                 borderRadius: "var(--df-radius-sm)",
                 background: "var(--df-surface-2)",
@@ -261,27 +261,56 @@ export function SettingsPage() {
                 opacity: source.enabled ? 1 : 0.55,
               }}
             >
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", gap: 4, marginBottom: 2 }}>
-                  <Button
-                    variant="ghost"
-                    aria-label={t("settings.moveUp")}
-                    disabled={index === 0}
-                    onClick={() => moveSource(index, -1)}
-                    style={{ padding: "2px 6px" }}
-                  >
-                    ↑
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    aria-label={t("settings.moveDown")}
-                    disabled={index === settings.searchSources.length - 1}
-                    onClick={() => moveSource(index, 1)}
-                    style={{ padding: "2px 6px" }}
-                  >
-                    ↓
-                  </Button>
-                </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: "var(--df-radius-sm)",
+                  overflow: "hidden",
+                  border: "1px solid var(--df-border)",
+                  flexShrink: 0,
+                }}
+              >
+                <button
+                  aria-label={t("settings.moveUp")}
+                  disabled={index === 0}
+                  onClick={() => moveSource(index, -1)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 24,
+                    height: 18,
+                    background: "var(--df-surface-1)",
+                    border: "none",
+                    borderBottom: "1px solid var(--df-border)",
+                    cursor: index === 0 ? "not-allowed" : "pointer",
+                    opacity: index === 0 ? 0.35 : 1,
+                  }}
+                >
+                  <Icon name="chevron-up" size={12} />
+                </button>
+                <button
+                  aria-label={t("settings.moveDown")}
+                  disabled={index === settings.searchSources.length - 1}
+                  onClick={() => moveSource(index, 1)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 24,
+                    height: 18,
+                    background: "var(--df-surface-1)",
+                    border: "none",
+                    cursor: index === settings.searchSources.length - 1 ? "not-allowed" : "pointer",
+                    opacity: index === settings.searchSources.length - 1 ? 0.35 : 1,
+                  }}
+                >
+                  <Icon name="chevron-down" size={12} />
+                </button>
+              </div>
+
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 14 }}>
                   {source.name}{" "}
                   {source.builtIn && (
@@ -294,7 +323,8 @@ export function SettingsPage() {
                   {source.baseUrl}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+
+              <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
                 <label
                   style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}
                   title={t("settings.enabled")}
@@ -312,6 +342,7 @@ export function SettingsPage() {
                     variant="ghost"
                     aria-label={`${t("common.remove")} ${source.name}`}
                     onClick={() => removeSource(source.id)}
+                    style={{ padding: "6px 8px" }}
                   >
                     <Icon name="trash-2" size={14} />
                   </Button>

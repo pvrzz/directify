@@ -18,3 +18,8 @@ apps/web/
 
 # Staging copies of fetched icons, already mirrored into the app itself
 design/
+
+# Generated against the full local monorepo (including the closed-source website),
+# which pulls in platform binaries this repo doesn't need. A fresh clone of just
+# apps/desktop + packages/* regenerates its own minimal lockfile via `pnpm install`.
+pnpm-lock.yaml

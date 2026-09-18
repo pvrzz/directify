@@ -37,18 +37,20 @@ const hoverGlow: Partial<Record<NonNullable<ButtonProps["variant"]>, string>> = 
   accent: "var(--df-glow-blue)",
 };
 
-export function Button({ variant = "primary", style, children, ...rest }: ButtonProps) {
+export function Button({ variant = "primary", style, disabled, children, ...rest }: ButtonProps) {
   return (
     <motion.button
-      whileHover={{ y: -2, filter: "brightness(1.08)", boxShadow: hoverGlow[variant] }}
-      whileTap={{ y: 0, scale: 0.98 }}
+      disabled={disabled}
+      whileHover={disabled ? undefined : { y: -2, filter: "brightness(1.08)", boxShadow: hoverGlow[variant] }}
+      whileTap={disabled ? undefined : { y: 0, scale: 0.98 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
       style={{
         padding: "10px 20px",
         borderRadius: "var(--df-radius-sm)",
         fontWeight: 600,
         fontSize: 14,
-        cursor: "pointer",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.4 : 1,
         ...variantStyles[variant],
         ...style,
       }}
