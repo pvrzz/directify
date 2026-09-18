@@ -1,5 +1,6 @@
 {
   "name": "@directify/desktop",
+  "productName": "directify",
   "version": "1.0.0",
   "description": "A feature-rich, unofficial client for catboy.best. Seamlessly search, download, and manage your osu! beatmaps and beatpacks.",
   "author": "directify",
