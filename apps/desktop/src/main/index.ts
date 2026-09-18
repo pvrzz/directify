@@ -7,7 +7,7 @@ import {
   type BeatmapSet,
   type CollectionDatabase,
 } from "@directify/shared";
-import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, shell, Menu } from "electron";
 import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -145,6 +145,8 @@ function createWindow(): void {
     win.loadFile(join(__dirname, "../renderer/index.html"));
   }
 }
+
+Menu.setApplicationMenu(null);
 
 app.whenReady().then(async () => {
   const settings = loadSettings();

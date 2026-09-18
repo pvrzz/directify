@@ -153,3 +153,28 @@ body {
 .df-range-thumb::-moz-range-track {
   background: transparent;
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--df-surface-4) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--df-surface-4);
+  border-radius: var(--df-radius-lg);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--df-text-muted);
+}
